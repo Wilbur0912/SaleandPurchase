@@ -2,25 +2,56 @@
   <div class="submit-form">
     <div v-if="!submitted">
       <div class="form-group">
-        <label for="title">Title</label>
+        <label for="id">ID</label>
         <input
           type="text"
           class="form-control"
-          id="title"
+          id="id"
           required
-          v-model="tutorial.title"
-          name="title"
+          v-model="tutorial.id"
+          name="id"
+        />
+      </div>
+      <div class="form-group">
+        <label for="tradeNames">廠商名稱</label>
+        <input
+          type="text"
+          class="form-control"
+          id="tradeNames"
+          required
+          v-model="tutorial.tradeNames"
+          name="tradeNames"
         />
       </div>
 
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="productName">項目</label>
         <input
           class="form-control"
-          id="description"
+          id="productName"
           required
-          v-model="tutorial.description"
-          name="description"
+          v-model="tutorial.productName"
+          name="productName"
+        />
+      </div>
+      <div class="form-group">
+        <label for="price">價格</label>
+        <input
+          class="form-control"
+          id="price"
+          required
+          v-model="tutorial.price"
+          name="price"
+        />
+      </div>
+      <div class="form-group">
+        <label for="quentity">數量</label>
+        <input
+          class="form-control"
+          id="quentity"
+          required
+          v-model="tutorial.quentity"
+          name="quentity"
         />
       </div>
 
@@ -42,9 +73,11 @@ export default {
   data() {
     return {
       tutorial: {
-        id: null,
-        title: "",
-        description: "",
+        id: "",
+        tradeNames: "",
+        productName: "",
+        price: "",
+        quentity: "",
         published: false
       },
       submitted: false
@@ -53,8 +86,11 @@ export default {
   methods: {
     saveTutorial() {
       var data = {
-        title: this.tutorial.title,
-        description: this.tutorial.description
+        id: this.tutorial.id,
+        tradeNames: this.tutorial.tradeNames,
+        productName: this.tutorial.productName,
+        price: this.tutorial.price,
+        quentity: this.tutorial.quentity,
       };
 
       TutorialDataService.create(data)
@@ -62,10 +98,12 @@ export default {
           this.tutorial.id = response.data.id;
           console.log(response.data);
           this.submitted = true;
+          this.$router.push("/tutorials")
         })
         .catch(e => {
           console.log(e);
-        });
+      });
+      
     },
     
     newTutorial() {

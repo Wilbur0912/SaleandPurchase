@@ -1,40 +1,40 @@
 <template>
-  <div v-if="currentTutorial" class="edit-form">
+  <div v-if="currentSale" class="edit-form">
     <h4>存貨清單</h4>
     <form>
       <div class="form-group">
-        <label for="tradeNames">廠商名稱</label>
-        <input type="text" class="form-control" id="tradeNames"
-          v-model="currentTutorial.tradeNames"
+        <label for="customerName">顧客名稱</label>
+        <input type="text" class="form-control" id="customerName"
+          v-model="currentSale.customerName"
         />
       </div>
       <div class="form-group">
         <label for="productName">項目</label>
         <input type="text" class="form-control" id="productName"
-          v-model="currentTutorial.productName"
+          v-model="currentSale.productName"
         />
       </div>
       <div class="form-group">
         <label for="price">價格</label>
         <input type="text" class="form-control" id="price"
-          v-model="currentTutorial.price"
+          v-model="currentSale.price"
         />
       </div>
       <div class="form-group">
         <label for="quentity">數量</label>
         <input type="text" class="form-control" id="quentity"
-          v-model="currentTutorial.quentity"
+          v-model="currentSale.quentity"
         />
       </div>
 
       <div class="form-group">
         <label><strong>Status:</strong></label>
-        {{ currentTutorial.published ? "Published" : "Pending" }}
+        {{ currentSale.published ? "Published" : "Pending" }}
       </div>
     </form>
 
     <button class="badge badge-primary mr-2"
-      v-if="currentTutorial.published"
+      v-if="currentSale.published"
       @click="updatePublished(false)"
     >
       UnPublish
@@ -46,13 +46,13 @@
     </button>
 
     <button class="badge badge-danger mr-2"
-      @click="deleteTutorial"
+      @click="deleteSale"
     >
       Delete
     </button>
 
     <button type="submit" class="badge badge-success"
-      @click="updateTutorial"
+      @click="updateSale"
     >
       Update
     </button>
@@ -61,26 +61,26 @@
 
   <div v-else>
     <br />
-    <p>Please click on a Tutorial...</p>
+    <p>Please click on a Sale...</p>
   </div>
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService";
+import SaleDataService from "../services/SaleDataService";
 
 export default {
-  name: "tutorial",
+  name: "Sale",
   data() {
     return {
-      currentTutorial: null,
+      currentSale: null,
       message: ''
     };
   },
   methods: {
-    getTutorial(id) {
-      TutorialDataService.get(id)
+    getSale(id) {
+      SaleDataService.get(id)
         .then(response => {
-          this.currentTutorial = response.data;
+          this.currentSale = response.data;
           console.log(response.data);
         })
         .catch(e => {
@@ -90,19 +90,18 @@ export default {
 
     updatePublished(status) {
       var data = {
-        id: this.currentTutorial.id,
-        tradeNames: this.currentTutorial.tradeNames,
-        productName: this.currentTutorial.productName,
-        price: this.currentTutorial.price,
-        quentity: this.currentTutorial.quentity,
+        id: this.currentSale.id,
+        customerName: this.currentSale.tradeNames,
+        productName: this.currentSale.productName,
+        price: this.currentSale.price,
+        quentity: this.currentSale.quentity,
         published: status
       };
 
-      TutorialDataService.update(this.currentTutorial.id, data)
+      SaleDataService.update(this.currentSale.id, data)
         .then(response => {
           console.log(response.data);
-          this.currentTutorial.published = status;
-          console.log(data)
+          this.currentSale.published = status;
           this.message = 'The status was updated successfully!';
         })
         .catch(e => {
@@ -110,22 +109,22 @@ export default {
         });
     },
 
-    updateTutorial() {
-      TutorialDataService.update(this.currentTutorial.id, this.currentTutorial)
+    updateSale() {
+      SaleDataService.update(this.currentSale.id, this.currentSale)
         .then(response => {
           console.log(response.data);
-          this.message = 'The tutorial was updated successfully!';
+          this.message = 'The Sale was updated successfully!';
         })
         .catch(e => {
           console.log(e);
         });
     },
 
-    deleteTutorial() {
-      TutorialDataService.delete(this.currentTutorial.id)
+    deleteSale() {
+      SaleDataService.delete(this.currentSale.id)
         .then(response => {
           console.log(response.data);
-          this.$router.push({ name: "tutorials" });
+          this.$router.push("/sales")
         })
         .catch(e => {
           console.log(e);
@@ -134,7 +133,7 @@ export default {
   },
   mounted() {
     this.message = '';
-    this.getTutorial(this.$route.params.id);
+    this.getSale(this.$route.params.id);
   }
 };
 </script>
